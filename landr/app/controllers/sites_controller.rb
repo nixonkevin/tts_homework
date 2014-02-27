@@ -4,7 +4,9 @@ class SitesController < ApplicationController
   # GET /sites
   # GET /sites.json
   def index
-    @sites = Site.all
+    @sites = current_user.sites
+    logger.debug "CURRENT_USER: #{current_user}"
+    #logger.debug ""
   end
 def landing
   short_name = params[:short_name]
@@ -21,7 +23,7 @@ def signup
   site = Site.where(short_name: short_name).first
   prospect.site = site
   prospect.save
-  flash(:notice) = "Thanks, We will email you when the site is ready!!"
+  flash[:notice] = "Thanks, We will email you when the site is ready!!"
   redirect_to action: :landing
 end
   # GET /sites/1
@@ -42,6 +44,7 @@ end
   # POST /sites.json
   def create
     @site = Site.new(site_params)
+    @site.user = current_user
 
     respond_to do |format|
       if @site.save
@@ -82,6 +85,9 @@ end
     # Use callbacks to share common setup or constraints between actions.
     def set_site
       @site = Site.find(params[:id])
+    if @site.user != current_user
+      raise "This is an issue"
+    end
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
