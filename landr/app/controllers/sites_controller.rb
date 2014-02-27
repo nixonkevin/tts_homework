@@ -11,6 +11,7 @@ def landing
   logger.debug "USER PASSED: #{short_name}"
   @site = Site.where(short_name: short_name).first
   logger.debug "FOUND SITE: #{@site}"
+  render layout: 'landing'
 end
   # GET /sites/1
   # GET /sites/1.json
