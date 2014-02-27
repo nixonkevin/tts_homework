@@ -1,6 +1,9 @@
 Landr::Application.routes.draw do
-  get "l/:short_name" => "sites#landing"
+  root "sites#index"
+  get "l/:short_name" => "sites#landing",
+    as: 'site_landing'
   post "l/:short_name" => "sites#signup"
+
   resources :sites
 
   devise_for :users
